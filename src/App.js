@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import cflLogo from "./assets/cfl365-logo-light.svg";
-import Web3 from 'web3';
+import Web3 from "web3";
 const tokenABI = JSON.parse(`[
 	{
 		"inputs": [],
@@ -298,22 +298,20 @@ const tokenABI = JSON.parse(`[
 ]`);
 
 let web3 = new Web3(Web3.givenProvider);
-const address = '0x4DCA9cC45ad1b72eb1e9CF3497b2F21a06b40D85';
+const address = "0x4DCA9cC45ad1b72eb1e9CF3497b2F21a06b40D85";
 const tokenContract = new web3.eth.Contract(tokenABI, address);
-
 
 function App() {
   const [isExtension, setExtension] = useState(false);
   const [isConnected, setIsConnected] = useState(false);
-  const [account, setAccount] = useState('');
+  const [account, setAccount] = useState("");
   const [chainId, setChainId] = useState(0);
-  const [accountTo, setAccountTo] = useState('');
+  const [accountTo, setAccountTo] = useState("");
   const [amount, setAmount] = useState(0);
 
-  
   const detectMetamaskExtension = async () => {
     try {
-      console.log(await web3.givenProvider)
+      console.log(await web3.givenProvider);
       if ((await web3.givenProvider) !== null) {
         setExtension(true);
       } else {
@@ -323,7 +321,7 @@ function App() {
       throw error;
     }
   };
-  
+
   const detectMetamaskConnection = async () => {
     try {
       if (!isConnected && isExtension) {
@@ -341,23 +339,23 @@ function App() {
       throw error;
     }
   };
-  
-  async function getToken(){
+
+  async function getToken() {
     try {
       await tokenContract.methods
         .faucet(accountTo, amount)
         .send({ from: account })
-        .on('transactionHash', function (hash) {
-          console.log('hash', hash);
+        .on("transactionHash", function (hash) {
+          console.log("hash", hash);
         })
-        .on('confirmation', function (confirmationNumber, receipt) {
-          console.log('confirmation', confirmationNumber, receipt);
+        .on("confirmation", function (confirmationNumber, receipt) {
+          console.log("confirmation", confirmationNumber, receipt);
         })
-        .on('receipt', function (receipt) {
+        .on("receipt", function (receipt) {
           // receipt example
           console.log(receipt);
         })
-        .on('error', function (error) {
+        .on("error", function (error) {
           console.log(error);
         });
     } catch (error) {
@@ -368,15 +366,15 @@ function App() {
   function getChain() {
     switch (chainId) {
       case 1:
-          return 'Ethereum'
+        return "Ethereum";
       case 4:
-        return 'Rinkeby'
+        return "Rinkeby";
       case 3:
-        return 'Ropsten'
+        return "Ropsten";
       case 5:
-        return 'Goerli'
+        return "Goerli";
       case 42:
-        return 'Kovan'
+        return "Kovan";
       default:
         break;
     }
@@ -389,9 +387,7 @@ function App() {
     if (!isConnected && isExtension) {
       detectMetamaskConnection();
     }
-    return () => {
-      
-    }
+    return () => {};
   }, []);
 
   setInterval(() => {
@@ -401,7 +397,9 @@ function App() {
   }, 1000);
 
   function openModal() {
-    window.open('https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn');
+    window.open(
+      "https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn"
+    );
   }
 
   return (
@@ -409,77 +407,89 @@ function App() {
       <div className="flex items-end justify-end py-12 px-4 sm:px-6 lg:px-8">
         <button
           type="submit"
-          onClick={!isExtension ? openModal  : detectMetamaskConnection}
+          onClick={!isExtension ? openModal : detectMetamaskConnection}
           className="group relative flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-primary hover:bg-primary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
-          >
-          {
-            !isExtension ? ('Install Metamask') : !isConnected ? ('Connect') : (`${getChain()} - ${account.substr(0, 8)}...${account.substr(-4, 4)}`)
-          }
-          </button>
+        >
+          {!isExtension
+            ? "Install Metamask"
+            : !isConnected
+            ? "Connect"
+            : `${getChain()} - ${account.substr(0, 8)}...${account.substr(
+                -4,
+                4
+              )}`}
+        </button>
       </div>
-    <div className="min-h- flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
-        <div>
-          <img
-            className="mx-auto h-12 w-auto"
-            src={cflLogo}
-            alt="Workflow"
-          />
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">CFL365 Token Faucet</h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
-            <a href="#" className="font-medium text-primary hover:text-primary">
-              Testnet token faucet
-            </a>
-          </p>
-        </div>
-        <div className="mt-8 space-y-6">
-          <div className="rounded-md shadow-sm -space-y-px">
-            <div className="mb-4">
-              <label htmlFor="address" className="sr-only">
-                Ethereum address
-              </label>
-              <input
-                id="address"
-                name="address"
-                type="text"
-                autoComplete="text"
+      <div className="min-h- flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-md w-full space-y-8">
+          <div>
+            <img className="mx-auto h-12 w-auto" src={cflLogo} alt="Workflow" />
+            <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+              CFL365 Token Faucet
+            </h2>
+            <p className="mt-2 text-center text-sm text-gray-600">
+              <a
+                href="#"
+                className="font-medium text-primary hover:text-primary"
+              >
+                Testnet token faucet
+              </a>
+            </p>
+          </div>
+          <div className="mt-8 space-y-6">
+            <div className="rounded-md shadow-sm -space-y-px">
+              <div className="mb-4">
+                <label htmlFor="address" className="sr-only">
+                  Ethereum address
+                </label>
+                <input
+                  id="address"
+                  name="address"
+                  type="text"
+                  autoComplete="text"
                   required
                   onChange={(e) => setAccountTo(e.target.value)}
-                className="appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-primary focus:border-primary focus:z-10 sm:text-sm"
-                placeholder="Your Ethereum address..."
+                  className="appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-primary focus:border-primary focus:z-10 sm:text-sm"
+                  placeholder="Your Ethereum address..."
                 />
-                <p className="mt-2 text-sm text-gray-400">Hint: Your metamask account address</p>
-            </div>
-            <div className="mb-4">
-              <label htmlFor="amount" className="sr-only">
-                Token Amount
-              </label>
-              <input
-                id="amount"
-                name="amount"
-                type="text"
-                autoComplete="amount"
+                <p className="mt-2 text-sm text-gray-400">
+                  Hint: Your metamask account address
+                </p>
+              </div>
+              <div className="mb-4">
+                <label htmlFor="amount" className="sr-only">
+                  Token Amount
+                </label>
+                <input
+                  id="amount"
+                  name="amount"
+                  type="text"
+                  autoComplete="amount"
                   required
                   onChange={(e) => setAmount(e.target.value)}
-                className="appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-primary focus:border-primary focus:z-10 sm:text-sm"
-                placeholder="Token amount"
-              />
+                  className="appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-primary focus:border-primary focus:z-10 sm:text-sm"
+                  placeholder="Token amount"
+                />
+              </div>
             </div>
-          </div>
-          <div>
-            <button
+            <div>
+              <button
                 onClick={getToken}
                 disabled={!isConnected && !isExtension}
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-primary hover:bg-primary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
-            >
-              Get some token
-            </button>
+                className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-primary hover:bg-primary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
+              >
+                Get some token
+              </button>
+            </div>
+          </div>
+          <div class="bg-indigo-100 border-l-4 border-indigo-500 text-indigo-700 p-4" role="alert">
+            <p class="font-bold">Notice</p>
+            <p>Rinkeby CFL365 Token : 0x4DCA9cC45ad1b72eb1e9CF3497b2F21a06b40D85</p>
           </div>
         </div>
       </div>
-      </div>
-      </>
-  )
+    </>
+  );
 }
 
 export default App;
